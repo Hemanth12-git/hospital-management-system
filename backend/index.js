@@ -1,6 +1,9 @@
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
 const { sequelize } = require('./config/db');
+const dotenv = require('dotenv');
+
+dotenv.config()
 
 fastify.register(cors, { 
     origin: '*', 
