@@ -1,0 +1,9 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "Welcome@123#",
+    "database": "hospital_db",
+    "host": "localhost",
+    "dialect": "postgres"
+  }
+}

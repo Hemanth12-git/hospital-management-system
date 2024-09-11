@@ -1,0 +1,13 @@
+admin - can see -> three cards -> 
+1) list of doctors (and can add doctors using form)
+2) diagnosis list diagnosis list and then if u click on a diagnosis it should go on to a new page and then display diagnosis details of that particular diagnosis
+3) create diagnosis
+
+
+doctor - can see -> two cards -> 
+1) list of doctors
+2) diagnosis list and then if u click on a diagnosis it should go on to a new page and then display diagnosis details of that particular diagnosis
+
+patient - can see -> one card -> 
+1) diagnosis details of that particular patient.
+
