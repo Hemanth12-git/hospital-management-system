@@ -2,7 +2,7 @@ export const getters = {
   getUsername(state) {
     return state.username;
   },
-  getUserType(state) {
+  getuserType(state) {
     return state.userType;
   },
   isAdmin(state) {

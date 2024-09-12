@@ -1,14 +1,13 @@
 const doctorController = require('../controllers/doctorController');
+const authenticate = require('../middleware/Authentication');
 
 class doctorRoutes {
     static async routes(fastify) {
-        fastify.get('/doctors', doctorController.list);
-        fastify.get('/doctors/:id', doctorController.getDoctorById);
-        fastify.post('/doctors', doctorController.createDoctor);
-        fastify.put('/doctors/:id', doctorController.updateDoctor);
-        fastify.delete('/doctor/:id', doctorController.deleteDoctor);
-        
-            
+        fastify.get('/doctors', { preHandler: [authenticate] }, doctorController.list);
+        fastify.get('/doctors/:id', { preHandler: [authenticate] }, doctorController.getDoctorById);
+        fastify.post('/doctors', { preHandler: [authenticate] }, doctorController.createDoctor);
+        fastify.put('/doctors/:id', { preHandler: [authenticate] }, doctorController.updateDoctor);
+        fastify.delete('/doctors/:id', { preHandler: [authenticate] }, doctorController.deleteDoctor);
     }
 }
 

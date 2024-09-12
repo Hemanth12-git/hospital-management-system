@@ -16,7 +16,7 @@ module.exports = Datatypes => ({
         allowNull: false
     },
 
-    usertype: {
+    userType: {
         type: Datatypes.ENUM('admin', 'doctor', 'patient'),
         allowNull: false
     },

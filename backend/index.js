@@ -1,6 +1,8 @@
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
 const { sequelize } = require('./config/db');
+// const cookie = require('@fastify/cookie');
+// const jwt =require('@fastify/jwt');
 const dotenv = require('dotenv');
 
 dotenv.config()
@@ -8,6 +10,13 @@ dotenv.config()
 fastify.register(cors, { 
     origin: '*', 
 });
+// fastify.register(cookie);
+// fastify.register(jwt,{secret : "i_am_hemanth"});
+// fastify.register(require('@fastify/cookie'), {
+//   secret: "my-secret", // for cookies signature
+// //   hook: 'onRequest', // set to false to disable cookie autoparsing or set autoparsing on any of the following hooks: 'onRequest', 'preParsing', 'preHandler', 'preValidation'. default: 'onRequest'
+//   parseOptions: {}  // options for parsing cookies
+// })
 
 fastify.register(require('./routes/patientRoutes'), { prefix: '/api/patients' });
 fastify.register(require('./routes/doctorRoutes'), { prefix: '/api/doctors' });

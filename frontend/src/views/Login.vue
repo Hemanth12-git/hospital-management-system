@@ -71,13 +71,13 @@ export default {
         // console.log(userType);
         const response = await userStore.login(username, password, userType);
         // console.log(response)
-        const trimmedUserType = response.trimEnd();
+        const trimmeduserType = response.trimEnd();
 
-        if (trimmedUserType === 'admin') {
+        if (trimmeduserType === 'admin') {
           this.$router.push('/admin');
-        } else if (trimmedUserType === 'doctor') {
+        } else if (trimmeduserType === 'doctor') {
           this.$router.push('/doctor');
-        } else if (trimmedUserType === 'patient') {
+        } else if (trimmeduserType === 'patient') {
           this.$router.push(`/patient/${patientId}`);
         }
       } catch (error) {

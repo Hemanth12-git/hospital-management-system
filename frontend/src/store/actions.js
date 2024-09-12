@@ -7,6 +7,20 @@ const DOCTORS_API_URL = `${API_BASE_URL}/api/doctors/doctors`;
 const DIAGNOSIS_API_URL = `${API_BASE_URL}/api/diagnosis/diagnosis`;
 const PATIENTS_API_URL = `${API_BASE_URL}/api/patients/patients`; 
 
+// Add the interceptor
+axios.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken'); // Retrieve token from localStorage
+
+  if (token) {
+    config.headers['Authorization'] = `Bearer ${token}`; // Add the token to the Authorization header
+  }
+
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+
 export const actions = {
   async fetchAlldiagnosis() {
     try {
@@ -95,9 +109,14 @@ export const actions = {
       // console.log(response)
       const userStore = useUserStore();
       
-      if (response.data.success) {
+      if (response.status==200) {
+
+        // console.log("djdnjdnjdjndnjdjjdddddddddddddjn");
         userStore.$state.username = response.data.data.username;
+        // console.log(userStore.$state.username)
         userStore.$state.userType = response.data.data.userType;
+        localStorage.setItem('authToken', response.data.data.authToken);
+
         return userType;
       } else {
         throw new Error('Login failed');
