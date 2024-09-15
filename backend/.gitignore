@@ -37,3 +37,6 @@ Thumbs.db  # Windows
 
 # IDE specific files
 .idea/     # WebStorm/PhpStorm
+
+#bulk upload files
+/uploads/
