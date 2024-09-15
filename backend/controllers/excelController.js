@@ -1,6 +1,7 @@
-const { Doctor } = require('../sequelize/models');
+// controllers/excelController.js
+const path = require('path');
+const uploadQueue = require('../utils/uploadQueue'); // Import the Bull queue
 const { validateExcelFile } = require('../validators/excelValidator');
-const ExcelParser = require('../lib/excelParser');
 
 async function handleBulkUpload(request, reply) {
     try {
@@ -14,25 +15,15 @@ async function handleBulkUpload(request, reply) {
             return reply.status(400).send({ errors: 'Invalid file type. Only Excel files are allowed.' });
         }
 
-        const excelParser = new ExcelParser(file.path); 
-        const usersData = await excelParser.toJson();
-        
-        const validData = usersData.map(row => ({
-            id: row.id,
-            name: row.name,
-            specialization: row.specialization
-        })).filter(row => row.id && row.name && row.specialization);
+        const filePath = path.join(__dirname, '../uploads', file.filename);
 
-        if (validData.length === 0) {
-            return reply.status(400).send({ message: 'No valid data to upload' });
-        }
+        // Add file processing to the Bull queue
+        await uploadQueue.add({ filePath });
 
-        await Doctor.bulkCreate(validData, { validate: true });
-
-        return reply.send({ message: 'Users data successfully uploaded and stored.' });
+        return reply.send({ message: 'File uploaded successfully and queued for processing.' });
     } catch (error) {
-        console.error('Failed to process the uploaded file:', error);
-        return reply.status(500).send({ error: 'Failed to process the uploaded file.', details: error.message });
+        console.error('Failed to add file to queue:', error);
+        return reply.status(500).send({ error: 'Failed to queue file for processing.', details: error.message });
     }
 }
 
