@@ -16,6 +16,11 @@
       >
         Add Doctor
       </el-button>
+
+      <el-button v-if = "userType === 'admin'" type = "primary" class="bulk-upload" @click = triggerFileUpload>
+        Bulk Upload
+      </el-button>
+      <input type="file" ref="fileInput" style="display: none;" @change="handleFileChange" accept=".xlsx" />
     </div>
   </div>
 </template>
@@ -56,6 +61,29 @@ export default {
     navigateTo(routeName) {
       this.$router.push({ name: routeName });
     },
+    triggerFileUpload() {
+      this.$refs.fileInput.click();
+    },
+    handleFileChange(event) {
+      this.selectedFile = event.target.files[0];
+      if (this.selectedFile) {
+        this.uploadFile();
+      }
+    },
+    async uploadFile() {
+      if (!this.selectedFile) {
+        alert("Please select an XLSX file.");
+        return;
+      }
+      try {
+        await actions.bulkUpload(this.selectedFile);
+        alert("Bulk upload successful.");
+        this.loadDoctors(); 
+      } catch (error) {
+        console.error("Bulk upload failed:", error);
+        alert("Failed to upload file.");
+      }
+    }
   },
   created() {
     this.loadDoctors();
@@ -70,7 +98,11 @@ export default {
   margin: auto;
 }
 
-.add-doctor-button {
+.add-doctor-button{
   margin-top: 20px;
+}
+
+.bulk-upload{
+  margin-top:20px
 }
 </style>

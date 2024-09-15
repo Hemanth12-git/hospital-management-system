@@ -11,20 +11,19 @@ import PatientPage from '@/views/PatientPage.vue';
 
 const routes = [
   { path: '/', name: 'Login', component: Login }, 
-  { path: '/admin', name: 'Admin', component: AdminPage },
-  { path: '/doctor', name: 'Doctor', component: DoctorPage },
+  { path: '/admin', name: 'Admin', component: AdminPage, meta: { requiresAuth: true } },
+  { path: '/doctor', name: 'Doctor', component: DoctorPage, meta: { requiresAuth: true } },
   {
     path: '/patient/:id',
     name: 'PatientPage',
     component: PatientPage,
     props: true, 
+    meta: { requiresAuth: true }
   },
-  
-  { path: '/create-doctor', name: 'create-doctor', component: CreateDoctorPage },
-  { path: '/doctor-list', name: 'doctor-list', component: DoctorListPage },
-  { path: '/diagnosis', name: 'diagnosis', component: DiagnosisCard },
-  { path: '/create-diagnosis', name: 'create-diagnosis', component: CreateDiagnosisPage },
-
+  { path: '/create-doctor', name: 'create-doctor', component: CreateDoctorPage, meta: { requiresAuth: true } },
+  { path: '/doctor-list', name: 'doctor-list', component: DoctorListPage, meta: { requiresAuth: true } },
+  { path: '/diagnosis', name: 'diagnosis', component: DiagnosisCard, meta: { requiresAuth: true } },
+  { path: '/create-diagnosis', name: 'create-diagnosis', component: CreateDiagnosisPage, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
@@ -32,5 +31,14 @@ const router = createRouter({
   routes,
 });
 
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('authToken');
+  if (to.meta.requiresAuth && !token) {
+    alert('Your session has expired');
+    next('/'); 
+  } else {
+    next(); 
+  }
+});
 
 export default router;

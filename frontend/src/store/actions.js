@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 import { useUserStore } from './index';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
@@ -7,12 +8,16 @@ const DOCTORS_API_URL = `${API_BASE_URL}/api/doctors/doctors`;
 const DIAGNOSIS_API_URL = `${API_BASE_URL}/api/diagnosis/diagnosis`;
 const PATIENTS_API_URL = `${API_BASE_URL}/api/patients/patients`; 
 
+const router = useRouter();
 // Add the interceptor
 axios.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken'); // Retrieve token from localStorage
-
+  const token = localStorage.getItem('authToken'); 
   if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`; // Add the token to the Authorization header
+    config.headers['Authorization'] = `Bearer ${token}`;
+  // } else {
+  //   // state.isAuthenticated = false;
+  //   router.push('/');
+    
   }
 
   return config;
@@ -116,7 +121,7 @@ export const actions = {
         // console.log(userStore.$state.username)
         userStore.$state.userType = response.data.data.userType;
         localStorage.setItem('authToken', response.data.data.authToken);
-
+        // state.isAuthenticated = true;
         return userType;
       } else {
         throw new Error('Login failed');
@@ -125,6 +130,7 @@ export const actions = {
       console.error('Error during login:', error);
       throw error;
     }
+
   },
 
   async fetchDiagnosisByPatientId(patientId) {
@@ -147,6 +153,25 @@ export const actions = {
       console.error('Error creating doctor:', error);
       throw error;
     }
+  },
+
+  async bulkUpload(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await axios.post(`${API_BASE_URL}/api/bulk-upload`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        }
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Error during bulk upload:', error);
+      throw error;
+    }
   }
+  
   
 };

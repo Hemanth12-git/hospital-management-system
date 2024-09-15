@@ -1,6 +1,7 @@
 const fastify = require('fastify')({ logger: true });
 const cors = require('@fastify/cors');
 const { sequelize } = require('./config/db');
+const multer = require('fastify-multer')
 // const cookie = require('@fastify/cookie');
 // const jwt =require('@fastify/jwt');
 const dotenv = require('dotenv');
@@ -10,6 +11,9 @@ dotenv.config()
 fastify.register(cors, { 
     origin: '*', 
 });
+
+fastify.register(multer.contentParser);
+// const upload = multer({ dest: './uploads/' }); 
 // fastify.register(cookie);
 // fastify.register(jwt,{secret : "i_am_hemanth"});
 // fastify.register(require('@fastify/cookie'), {
@@ -22,6 +26,7 @@ fastify.register(require('./routes/patientRoutes'), { prefix: '/api/patients' })
 fastify.register(require('./routes/doctorRoutes'), { prefix: '/api/doctors' });
 fastify.register(require('./routes/diagnosisRoutes'), { prefix: '/api/diagnosis' });
 fastify.register(require('./routes/auth'));
+fastify.register(require('./routes/excelRoutes'), {prefix : '/api' })
 
 fastify.get('/', async (req, res) => {
     res.send('Welcome to the Hospital Management System');
