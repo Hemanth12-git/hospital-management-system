@@ -1,6 +1,5 @@
-// controllers/excelController.js
 const path = require('path');
-const uploadQueue = require('../utils/uploadQueue'); // Import the Bull queue
+const uploadQueue = require('../utils/uploadQueue');
 const { validateExcelFile } = require('../validators/excelValidator');
 
 async function handleBulkUpload(request, reply) {
@@ -17,7 +16,6 @@ async function handleBulkUpload(request, reply) {
 
         const filePath = path.join(__dirname, '../uploads', file.filename);
 
-        // Add file processing to the Bull queue
         await uploadQueue.add({ filePath });
 
         return reply.send({ message: 'File uploaded successfully and queued for processing.' });

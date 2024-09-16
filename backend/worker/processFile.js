@@ -1,4 +1,3 @@
-// worker/processFile.js
 const xlsx = require('xlsx');
 const { Doctor } = require('../sequelize/models');
 

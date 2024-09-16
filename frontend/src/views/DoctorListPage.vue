@@ -23,7 +23,7 @@
           ref="fileInput"
           style="display: none;"
           @change="handleFileChange"
-          accept=".xlsx"
+          accept=".xlsx,.xls,.ods"
         />
       </div>
       <div class="doctor-list">
